@@ -1,6 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./scripts/data_extraction",
-        "./scripts/src"
-    ]
-}

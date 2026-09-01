@@ -2,8 +2,10 @@ import pymupdf
 from pathlib import Path
 
 # This finds the project root regardless of where the script is run from
-PROJECT_ROOT = Path(__file__).resolve().parents[2]  # go up 2 folders from this script
-PDF_PATH = PROJECT_ROOT / "asx-2025-annual-report.pdf"
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PDF_PATH = PROJECT_ROOT / "data" / "asx-2025-annual-report.pdf"
+
 
 def extract_text_by_page(pdf_path):
     doc = pymupdf.open(str(pdf_path))  

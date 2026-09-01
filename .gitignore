@@ -3,4 +3,4 @@
 __pycache__/
 chroma_db/
 *.pyc
-*.pdf
+data/*.pdf

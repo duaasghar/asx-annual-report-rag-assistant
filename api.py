@@ -6,7 +6,8 @@ load_dotenv()
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_chroma import Chroma
-from ragchain import build_rag_chain
+from src.build_vectorstore import build_vectorstore
+from src.rag_chain import build_rag_chain, format_docs, PROMPT_TEMPLATE
 
 app = FastAPI(title="ASX Annual Report RAG API")
 app.add_middleware(

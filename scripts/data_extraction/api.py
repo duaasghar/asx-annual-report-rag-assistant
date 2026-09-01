@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -8,7 +9,12 @@ from langchain_chroma import Chroma
 from ragchain import build_rag_chain
 
 app = FastAPI(title="ASX Annual Report RAG API")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Load the vector store and chain ONCE at startup, not per-request
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 vectorstore = Chroma(persist_directory="chroma_db", embedding_function=embeddings)

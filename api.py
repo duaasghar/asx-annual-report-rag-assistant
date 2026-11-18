@@ -2,7 +2,7 @@ import logging
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -68,10 +68,17 @@ class Answer(BaseModel):
 def ask(request: Request, payload: Question) -> Answer:
     question = payload.question.strip()
 
-    answer = chain.invoke(question)
+    try:
+        answer = chain.invoke(question)
+        # Also get the raw retrieved chunks, for source citations
+        retrieved_docs = retriever.invoke(question)
+    except Exception:
+        logger.exception("Gemini call failed for /ask")
+        raise HTTPException(
+            status_code=503,
+            detail="The AI model is busy right now. Please try again in a minute.",
+        )
 
-    # Also get the raw retrieved chunks, for source citations
-    retrieved_docs = retriever.invoke(question)
     sources = [
         Source(page=doc.metadata.get("page_number"), excerpt=doc.page_content[:200])
         for doc in retrieved_docs

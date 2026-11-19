@@ -41,7 +41,9 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
-          python-version-file: .python-version
+          # Latest 3.11.x: runners don't ship every patch release.
+          # Render uses the exact version in .python-version.
+          python-version: "3.11"
           cache: pip
           cache-dependency-path: requirements*.txt
       - run: pip install -r requirements-dev.txt

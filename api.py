@@ -87,11 +87,12 @@ def ask(request: Request, payload: Question) -> Answer:
     return Answer(question=question, answer=answer, sources=sources)
 
 
-@app.get("/")
+# HEAD is accepted too: uptime monitors (UptimeRobot, Render's port check) use it.
+@app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"status": "ok", "message": "ASX RAG API is running"}
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok" if CHUNK_COUNT > 0 else "degraded", "chunks": CHUNK_COUNT}
